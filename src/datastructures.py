@@ -43,7 +43,6 @@ class FamilyStructure:
         member['id'] = self._generateId()
         member['last_name'] = self.last_name
         self._members.append(member)
-
         pass
 
     def delete_member(self, id):
@@ -62,5 +61,15 @@ class FamilyStructure:
     def get_all_members(self):
         print()
         return self._members
+    
+    # def delete_member(self, id):
+    #     for index, existing_member in enumerate(self._members):
+    #         if existing_member['id'] == id:
+    #             # Elimina el miembro de la lista
+    #             self._members.pop(index)
+    #             return {"done": True}
+        
+    #     # Si no se encuentra el miembro con el id especificado, devuelve un diccionario con 'done' como False
+    #     return {"done": False}
     
 

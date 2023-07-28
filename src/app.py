@@ -7,7 +7,6 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from datastructures import FamilyStructure
 
-
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 CORS(app)
@@ -19,6 +18,15 @@ jackson_family = FamilyStructure("Jackson")
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
+
+def handle_bad_request(error):
+    return jsonify({"error": "Bad request"}), 400
+
+def handle_internal_server_error(error):
+    return jsonify({"error": "Internal Server error"}), 500
+
+# app.register_error_handler(400, handle_bad_request)
+# app.register_error_handler(500, handle_internal_server_error)
 
 # generate sitemap with all your endpoints
 @app.route('/')
@@ -32,8 +40,6 @@ def handle_hello():
     members = jackson_family.get_all_members()
     response_body = members   
     return jsonify(response_body), 200
-
-
 
 @app.route('/member', methods=['POST'])
 def add_member():
@@ -51,19 +57,10 @@ def get_member(member_id):
     else:
         return jsonify({"message": "Member not found"}), 404
 
-
-
-
 @app.route('/member/<int:member_id>', methods=['DELETE'])
 def delete_member(member_id):
     jackson_family.delete_member(member_id)
     return jsonify({"done": True}), 200
-
-
-
-
-
-
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
